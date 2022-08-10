@@ -19,13 +19,14 @@ class AuthController extends Controller
 
         if ($validate) {
             if (Auth::attempt($validate)) {
+                $request->session()->regenerate();
                 $user = Auth::user();
                 if ($user->status == 'aktif') {
                     //         $fullName = Auth::user()->full_name;
                     if($user->hasRole('admin')){
-                        return redirect()->route('dashboard_admin');
+                        return redirect()->intended('/admin-page')->with('success', 'Selamat Datang!');
                     }
-                    return redirect()->route('dashboard_user')->with('success', 'Selamat Datang!');
+                    return redirect()->intended('/dashboard_user')->with('success', 'Selamat Datang!');
                 } else {
                     Auth::logout();
                     return back()->with('error', 'Akun anda sudah tidak aktif ! Silahkan hubungi admin')->withInput();

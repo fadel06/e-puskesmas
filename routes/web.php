@@ -18,8 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticated'])->name('authenticated');
+Route::middleware('guest')->group(function(){
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'authenticated'])->name('authenticated');
+});
 
 
 Route::middleware('auth', 'revalidate')->group(function()
